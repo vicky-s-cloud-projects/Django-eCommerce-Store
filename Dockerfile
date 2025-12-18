@@ -1,12 +1,12 @@
-# -------- Base image --------
+# Base image
 FROM python:3.12-slim
 
-# -------- Environment --------
+# Environment 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 
-# -------- System dependencies --------
+# System dependencies 
 RUN apt-get update && apt-get install -y \
     build-essential \
     python3-dev \
@@ -23,28 +23,28 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-# -------- Work directory --------
+# Work directory 
 WORKDIR /app
 
-# -------- Install Python deps --------
+# Install Python deps 
 COPY requirements.txt .
 RUN pip install --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements.txt
 
-# -------- Copy project --------
+# Copy project 
 COPY . .
 
-# -------- Create non-root user --------
+# Create non-root user 
 RUN adduser --disabled-password appuser \
     && chown -R appuser /app
 USER appuser
 
-# -------- Collect static files --------
+# Collect static files 
 RUN python manage.py collectstatic --noinput
 
-# -------- Expose port --------
+# Expose port 
 EXPOSE 8000
 
-# -------- Start server --------
+# Start server 
 CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000"]
 
