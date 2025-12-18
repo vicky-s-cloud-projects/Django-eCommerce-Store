@@ -16,7 +16,10 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
+
+#ALLOWED_HOSTS = [".elb.amazonaws.com", "localhost", "127.0.0.1", "0.0.0.0", ".cloudfront.net"]
+ALLOWED_HOSTS = ["*"]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -34,17 +37,6 @@ INSTALLED_APPS = [
     'storages',
 ]
 
-#MIDDLEWARE = [
-#    # 'whitenoise.middleware.WhiteNoiseMiddleware',
-#
-#    'django.middleware.security.SecurityMiddleware',
-#    'django.contrib.sessions.middleware.SessionMiddleware',
-#    'django.middleware.common.CommonMiddleware',
-#    'django.middleware.csrf.CsrfViewMiddleware',
-#    'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    'django.contrib.messages.middleware.MessageMiddleware',
-#    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-#]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -83,20 +75,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 AUTH_USER_MODEL = 'accounts.Account'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'eshop',
-#         'USER' : 'omarreda',
-#         'PASSWORD' : os.environ.get('DB_PASS'),
-#         'HOST' : 'e-shop.cmesgttozqee.us-west-2.rds.amazonaws.com',
-#         'PORT' : '5432',
-#     }
-# }
 
 
 #DATABASES = {
@@ -190,15 +168,6 @@ EMAIL_PORT= 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
-# AWS_QUERYSTRING_AUTH = False
-
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-
-# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-
-# AWS_STORAGE_BUCKET_NAME = 'e--shop-bucket'
 
 if os.getcwd() == '/app' :
     DEBUG = False
