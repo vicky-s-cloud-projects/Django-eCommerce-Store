@@ -1,91 +1,225 @@
-# Ecommerce Website (Django/javascript)
+# 🚀 Production-Grade Django eCommerce 3-tier Application on AWS EKS (Zero-Trust Architecture)
 
-![Django Ecommerce Store](https://github.com/omarreda22/Django-eCommerce-Store/blob/main/core/static/img/e_shop.PNG)
+## 📌 Project Overview
 
-Full-featured shopping cart with PayPal & credit/debit payments
+This repository showcases a production-grade Django eCommerce application deployed on AWS using Docker, Kubernetes (EKS) and managed entirely through Terraform Infrastructure as Code. All this process was done from local linux operating system.
 
-Product rating & review system
+The system is designed using zero-trust security principles, with no direct public access to application pods or databases. All traffic is routed securely through CloudFront and AWS WAF, then through a locked-down Application Load Balancer, into a private EKS cluster, and finally to Django application pods backed by Amazon RDS (PostgreSQL).
 
-An actual real-world project built in a linear and progressive manner
-
-Admin area to manage customers, products & orders
-
-Product search, carousel, pagination & more
+This project goes beyond a basic deployment and reflects real-world cloud engineering, including architecture design, security hardening, operational troubleshooting, and cost-aware lifecycle management.
 
 
-## View Full Video Demo On [Youtube](https://www.youtube.com/watch?v=lwWEabH0-lY)
 
-<br>
+## 🎯 What This Project Demonstrates
+
+* End-to-end AWS cloud architecture design
+
+* Kubernetes (EKS) deployment in private subnets
+
+* Zero-trust networking and security model
+
+* Dockerized Django application using Gunicorn
+
+* CloudFront + AWS WAF as a secure public edge
+
+* AWS Load Balancer Controller & Kubernetes Ingress
+
+* Terraform-based modular infrastructure
+
+* IAM least-privilege and IRSA concepts
+
+* Real production troubleshooting (ALB, CloudFront, health checks)
+
+* Clean teardown to avoid unnecessary AWS costs
+
+This project intentionally includes real operational challenges such as ALB health check failures, CloudFront 502/400 errors, and security group misconfigurations to demonstrate hands-on problem-solving, not just a happy-path setup.
 
 
-## How to install on Windows
-1. clone this project
-2. install virtualenv
-```
-pip install virtualenv
-```
-3. create new virtual environment
-```
-py -m venv venv
-```
-4. activate the new virtual
-```
-.\venv\Scripts\activate
-```
-5. install requirements.txt
-```
-pip install -r requirements.txt
-```
-6. run local server to begin
+## 🧠 Architecture Overview
+### High-Level Traffic Flow
+
+User Browser
+
+↓
+
+CloudFront (Public CDN)
+
+↓
+
+AWS WAF (Web Application Firewall)
+
+↓
+
+Public Application Load Balancer (Restricted Access)
+
+↓
+
+Amazon EKS (Private Subnets)
+
+↓
+
+Kubernetes Service (ClusterIP)
+
+↓
+
+Django Pods (Gunicorn)
+
+↓
+
+Amazon RDS (PostgreSQL)
+
+## 🖼️ Architecture Diagram
+
+📌 PLACEHOLDER – Architecture Diagram
+
+## 🛠️ Technology Stack
+### Application Layer
+
+  * Django (Python)
+
+  * Gunicorn (WSGI Server)
+
+### Containerization & Orchestration
+
+  * Docker
+
+  * Kubernetes
+
+  * Amazon EKS
+
+### Infrastructure as Code
+
+  * Terraform (modular design)
+
+### Networking & Security
+
+  * Amazon VPC (public & private subnets)
+
+  * Application Load Balancer (ALB)
+
+  * AWS Load Balancer Controller
+
+  * AWS CloudFront
+
+  * AWS WAF
+
+  * IAM & IRSA (IAM Roles for Service Accounts)
+
+### Database
+
+  * Amazon RDS (PostgreSQL)
+
+
+## 🐳 Dockerized Django Application
+The Django application is packaged into a Docker image and runs using Gunicorn as the production WSGI server.
+
+  * Application listens on 0.0.0.0:8000
+
+  * Environment variables used for configuration
+
+  * No secrets are hardcoded inside the image
+
+  * Image is designed for Kubernetes workloads
+### Gunicorn Command
  ```
- py manage.py runserver
+ gunicorn core.wsgi:application --bind 0.0.0.0:8000
  ```
- 7. go live with [localhost:8000](http://localhost:8000/)
+## ☸️ Kubernetes Deployment (Amazon EKS)
+### Key Design Decisions
+
+  * All pods run in private subnets
+
+  * Kubernetes Service type is ClusterIP
+
+  * Ingress is managed by AWS Load Balancer Controller
+
+  * Rolling deployments enabled
+
+  * Horizontal scalability supported
  
- ### To install on Unix/macOS  [see this document](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments)
+### Resulting Security Model
+
+  * No pod or service is publicly exposed
+
+  * All ingress traffic flows through managed AWS services
+
+  * Kubernetes cluster remains fully private
+
+## ❤️ Health Check Design (Critical for ALB)
+A dedicated health endpoint was implemented to satisfy Application Load Balancer health checks.
+### Health Endpoint
+```
+ GET /healthz/ → HTTP 200 OK
+```
+This endpoint ensures:
+
+  * ALB targets remain healthy
+
+  * CloudFront can successfully reach the origin
+
+  * No unexpected redirects or 400 errors break routing
+
+Without this, CloudFront → ALB → EKS communication fails.
+
+## 🔐 Zero-Trust Security Architecture
+This project strictly follows zero-trust principles:
+
+  * Kubernetes pods are never public
+
+  * RDS is accessible only from EKS nodes
+
+  * ALB security groups allow traffic only from CloudFront
+
+  * CloudFront is the single public entry point
+
+  * IAM roles follow least-privilege access
+
+  * No implicit trust between components
+
+## 🌍 CloudFront & AWS WAF
+### CloudFront
+
+  * Acts as the public CDN
+
+  * Provides DDoS protection
+
+  * Improves latency and availability
+
+  * Serves as the secure edge layer
+
+### AWS WAF
+
+  * Attached directly to CloudFront
+
+  * Protects against SQL injection, XSS, and malicious traffic
+
+  * Adds an additional security layer before traffic reaches AWS infrastructure
+
+## 🧩 Terraform Infrastructure
+#### Terraform is used to provision and manage:
+
+  * VPC & networking
+
+  * Amazon EKS
+
+  * Amazon RDS
+
+  * CloudFront distribution
+
+  * AWS WAF
+
+  * IAM roles & policies
+
+  * Security groups
+
+#### Benefits
+
+  * Fully reproducible infrastructure
+
+  * Easy environment teardown
+
+  * Clear separation of concerns using modules
+
+  * Cost-aware cloud management
+
  
- 
- <br>
- 
- 
- 
- ## To add new products and access admin panel 
- 1. run on trimnal 
- ```
- py manage.py createsuperuser
- ```
- 2. create new admin user
- 2. go to [localhost:8000/admin](http://localhost:8000/admin)
-
-
-## Some of feature in this store
-
-- Full-featured shopping cart
-- Review and Rating System
-- Top products carousel
-- Product pagination
-- Product search feature
-- User profile with orders
-- Admin product management
-- Admin Order details page
-- Mark orders as a delivered option
-- Checkout process (shipping, payment method, etc... )
-- PayPal / Credit Card integration
-- Category Filter
-- Addition of variable products    
-- Post on your blog
-- Contact page
-- Professional and modern website design with matching colors
-- An unlimited number of products and categories
-- Unlimited pages 
-- Easy to manage the site
-
-
-
-### Need help? Found a bug? Message me!
-
-
-
-<br>
-
-### Enjoy^^
