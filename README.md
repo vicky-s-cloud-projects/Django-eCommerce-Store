@@ -222,4 +222,121 @@ This project strictly follows zero-trust principles:
 
   * Cost-aware cloud management
 
+## 🚀 Deployment Workflow
+1. Build & Push Docker Image
+```
+docker build -t django-ecommerce .
+docker push <ECR_REPOSITORY>
+```
+2. Provision AWS Infrastructure
+```
+terraform init
+terraform apply
+```
+3. Deploy Kubernetes Resources
+```
+kubectl apply -f k8s/
+```
+4. Access Application
+  * Application is accessed via CloudFront domain
+  * Backend remains protected behind ALB, WAF, and EKS
+
+## 🧪 Troubleshooting & Validation Performed
+This project involved real production debugging, including:
+  * Fixing ALB target group health check failures
+  * Resolving CloudFront '502 Failed to contact' origin errors
+  * Correcting security group ingress rules
+  * Validating Kubernetes pod networking
+  * Debugging Django 'ALLOWED_HOSTS'
+  * Verifying RDS connectivity and credentials
+
+## 🖼️ Deployment Proof & Screenshots
+* Terraform apply output
+<img width="1920" height="1080" alt="Screenshot (11)" src="https://github.com/user-attachments/assets/359076de-c181-48cb-87d5-61e02cd4fad9" />
+
+<img width="1920" height="1080" alt="Screenshot (12)" src="https://github.com/user-attachments/assets/789a28da-4e13-4f73-a8ee-0e19a8f94469" />
+
+<img width="1920" height="1080" alt="Screenshot (13)" src="https://github.com/user-attachments/assets/2012371a-432f-41ef-9653-65922b260062" />
+
+* EKS cluster status
+<img width="1920" height="1031" alt="Screenshot (14)" src="https://github.com/user-attachments/assets/293357d8-1a4a-42f9-9da6-f3770c1fd4d9" />
+
+<img width="1263" height="163" alt="Screenshot (19)" src="https://github.com/user-attachments/assets/e88ee250-5775-4c3e-b866-3724bc205592" />
+
+* Kubernetes pods healthy
+<img width="1920" height="1080" alt="Screenshot (16)" src="https://github.com/user-attachments/assets/e6c18172-0dbe-4c74-8a19-0e7abc1c220c" />
+
+<img width="1352" height="225" alt="Screenshot (17)" src="https://github.com/user-attachments/assets/d692cc3b-a1ef-4ab3-85a8-646981f6b682" />
+
+<img width="1920" height="591" alt="Screenshot (18)" src="https://github.com/user-attachments/assets/13e6e6ff-2a68-4d84-ae1d-24b90add5896" />
+
+* ALB target group healthy
+<img width="1920" height="1080" alt="Screenshot (21)" src="https://github.com/user-attachments/assets/4b07d067-a51a-406f-92aa-d4c9fc30c3d6" />
+
+<img width="1920" height="141" alt="Screenshot (20)" src="https://github.com/user-attachments/assets/efa37bef-7928-4ceb-a416-d1f33776b089" />
+
+<img width="1920" height="469" alt="Screenshot (28)" src="https://github.com/user-attachments/assets/4250d432-d2c1-47ab-821b-2ee875fb0200" />
+
+<img width="1674" height="204" alt="Screenshot (31)" src="https://github.com/user-attachments/assets/e00ee74f-e41c-4a6a-8595-777422950fc1" />
+
+<img width="1920" height="1080" alt="Screenshot (22)" src="https://github.com/user-attachments/assets/69aa24c3-2dc3-4671-a641-77f127f44343" />
+
+<img width="1920" height="1080" alt="Screenshot (23)" src="https://github.com/user-attachments/assets/548de266-376c-4af3-9429-87c477bcf631" />
+
+<img width="1920" height="1080" alt="Screenshot (26)" src="https://github.com/user-attachments/assets/38fb9bf8-dba0-4abb-a236-5645455adbb1" />
+
+<img width="1920" height="1080" alt="Screenshot (27)" src="https://github.com/user-attachments/assets/7f46d721-cfdf-4fea-a846-efdb337b7d24" />
+
+<img width="1920" height="986" alt="Screenshot (29)" src="https://github.com/user-attachments/assets/98eaded8-cdf6-442b-bc61-3fb5e6000a0b" />
+
+<img width="1920" height="1002" alt="Screenshot (30)" src="https://github.com/user-attachments/assets/5545eda5-2294-4185-bb6e-a77df11c839c" />
+
+<img width="1920" height="1080" alt="Screenshot (32)" src="https://github.com/user-attachments/assets/7a760191-34ce-4882-95d3-cb79492ae585" />
+
+<img width="1920" height="1080" alt="Screenshot (33)" src="https://github.com/user-attachments/assets/260ccf5d-a402-4029-b3aa-3382f071fa2b" />
+
+<img width="1920" height="1080" alt="Screenshot (34)" src="https://github.com/user-attachments/assets/c09b7163-e9a0-4a51-8b97-c2452c93e35f" />
+
+<img width="1920" height="1080" alt="Screenshot (35)" src="https://github.com/user-attachments/assets/1852871b-c9e7-4b50-8803-6f1f058ce19b" />
+
+<img width="1920" height="1080" alt="Screenshot (36)" src="https://github.com/user-attachments/assets/953c4d66-b2ab-4eb9-a433-cd91664d481a" />
+
+<img width="1920" height="1080" alt="Screenshot (37)" src="https://github.com/user-attachments/assets/271288ea-78c6-436b-8d8e-8c2633750010" />
+
+
+## 💰 Cost Management
+All resources are provisioned using Terraform.
+To avoid AWS charges, the entire infrastructure can be destroyed safely using:
+```
+terraform destroy
+```
+This removes:
+* EKS cluster
+
+* ALBs
+
+* CloudFront
+
+* WAF
+
+* RDS
+
+* VPC and networking components
+
+## 👤 Author
+Designed & deployed as part of cloud engineering learning and portfolio building.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
